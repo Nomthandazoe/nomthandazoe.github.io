@@ -1,21 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Validation Result</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 2rem; max-width: 700px; margin: auto; }
-    #result { white-space: pre-wrap; background: #f0f0f0; padding: 1rem; border-radius: 6px; }
+    h2 { margin-bottom: 1rem; }
+    #validator-url { font-size: 0.9rem; color: #444; word-break: break-all; margin-bottom: 1rem; }
+    #result { white-space: pre-wrap; background: #f4f4f4; padding: 1rem; border-radius: 6px; }
+    .error { color: red; }
   </style>
 </head>
 <body>
   <h2>Validation Result</h2>
+  <div id="validator-url">Preparing test...</div>
   <div id="result">Loading...</div>
 
   <script>
-    const result = localStorage.getItem("validationResult");
-    document.getElementById("result").innerText = result || "No result found.";
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        email: params.get("email"),
+        url: params.get("url")
+      };
+    }
+
+    async function testAPI() {
+      const { email, url } = getQueryParams();
+
+      const validatorLink = `https://yhxzjyykdsfkdrmdxgho.supabase.co/functions/v1/junior-dev?url=${encodeURIComponent(url)}&email=${encodeURIComponent(email)}`;
+      document.getElementById("validator-url").textContent = `Testing with: ${validatorLink}`;
+
+      if (!email || !url) {
+        document.getElementById("result").innerHTML = "<p class='error'>Missing email or API URL in the query string.</p>";
+        return;
+      }
+
+      try {
+        const res = await fetch(validatorLink);
+        const text = await res.text();
+        document.getElementById("result").textContent = text;
+      } catch (err) {
+        document.getElementById("result").innerHTML = `<p class='error'>Error: ${err.message}</p>`;
+      }
+    }
+
+    testAPI();
   </script>
 </body>
 </html>
