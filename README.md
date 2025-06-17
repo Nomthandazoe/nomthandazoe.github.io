@@ -1,1 +1,1 @@
-# Front end for testing an API
+# Front end for testing an API endpoint
