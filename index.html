@@ -21,27 +21,15 @@
      <div id="response"></div>
 
      <script>
-        document.getElementById("validation_formform").addEventListener("submit", async function (e) {
-          e.preventDefault();
-          
-          const url = document.getElementById("url").value.trim();
-          const email = document.getElementById("email").value.trim();
+      document.getElementById("validation_formform").addEventListener("submit", function (e) {
+        e.preventDefault();
 
-          const testUrl = `https://yhxzjyykdsfkdrmdxgho.supabase.co/functions/v1/junior-dev?url=${encodeURIComponent(url)}&email=${encodeURIComponent(email)}`;
+        const url = document.getElementById("url").value.trim();
+        const email = document.getElementById("email").value.trim();
 
-          const responseDiv = document.getElementById("response");
-          responseDiv.innerHTML = "Loading...";
-
-          try {
-            const res = await fetch(testUrl);
-            const text = await res.text();
-
-            localStorage.setItem("validationResult", text);
-            window.location.href = "result.html";
-          } catch (err) {
-              alert("Something went wrong: " + err.message);
-            }
-        });
+        const redirectUrl = `result.html?url=${encodeURIComponent(url)}&email=${encodeURIComponent(email)}`;
+        window.location.href = redirectUrl;
+      });
      </script>
     
 </body>
