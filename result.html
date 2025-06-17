@@ -1,21 +1,46 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Validation Result</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test Result</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 2rem; max-width: 700px; margin: auto; }
-    #result { white-space: pre-wrap; background: #f0f0f0; padding: 1rem; border-radius: 6px; }
+    #result { white-space: pre-wrap; background: #f4f4f4; padding: 1rem; border-radius: 6px; }
   </style>
 </head>
 <body>
   <h2>Validation Result</h2>
-  <div id="result">Loading...</div>
+  <div id="result">Testing...</div>
 
   <script>
-    const result = localStorage.getItem("validationResult");
-    document.getElementById("result").innerText = result || "No result found.";
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        email: params.get("email"),
+        url: params.get("url")
+      };
+    }
+
+    async function testAPI() {
+      const { email, url } = getQueryParams();
+
+      if (!email || !url) {
+        document.getElementById("result").textContent = "Missing URL or email in query string.";
+        return;
+      }
+
+      const testUrl = `https://yhxzjyykdsfkdrmdxgho.supabase.co/functions/v1/junior-dev?url=${encodeURIComponent(url)}&email=${encodeURIComponent(email)}`;
+
+      try {
+        const res = await fetch(testUrl);
+        const text = await res.text();
+        document.getElementById("result").textContent = text;
+      } catch (err) {
+        document.getElementById("result").textContent = `Error: ${err.message}`;
+      }
+    }
+
+    testAPI();
   </script>
 </body>
 </html>
