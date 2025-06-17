@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validation Result</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; max-width: 700px; margin: auto; }
+    #result { white-space: pre-wrap; background: #f0f0f0; padding: 1rem; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h2>Validation Result</h2>
+  <div id="result">Loading...</div>
+
+  <script>
+    const result = localStorage.getItem("validationResult");
+    document.getElementById("result").innerText = result || "No result found.";
+  </script>
+</body>
+</html>
