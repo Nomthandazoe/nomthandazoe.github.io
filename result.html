@@ -3,46 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Validation Result</title>
+  <title>Validation Results</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 2rem; max-width: 700px; margin: auto; }
+    body { font-family: Arial, sans-serif; 
+      padding: 2rem; 
+      max-width: 700px; 
+      margin: auto; }
+
     h2 { margin-bottom: 1rem; }
-    #validator-url { font-size: 0.9rem; color: #444; word-break: break-all; margin-bottom: 1rem; }
-    #result { white-space: pre-wrap; background: #f4f4f4; padding: 1rem; border-radius: 6px; }
+    
+    #validation_url { font-size: 0.9rem; 
+      color: #444; 
+      word-break: break-all; 
+      margin-bottom: 1rem; }
+      
+    #results { white-space: pre-wrap; 
+      background: #f4f4f4; 
+      padding: 1rem; 
+      border-radius: 6px; }
+
     .error { color: red; }
   </style>
 </head>
 <body>
-  <h2>Validation Result</h2>
-  <div id="validator-url">Preparing test...</div>
-  <div id="result">Loading...</div>
+  <h2>Validation Results</h2>
+  <div id="validation_url">Testing...</div>
+  <div id="results">Loading results...</div>
 
   <script>
     function getQueryParams() {
       const params = new URLSearchParams(window.location.search);
       return {
-        email: params.get("email"),
-        url: params.get("url")
+        url: params.get("url"),
+        email: params.get("email")  
       };
     }
 
     async function testAPI() {
-      const { email, url } = getQueryParams();
+      const {url, email} = getQueryParams();
 
-      const validatorLink = `https://yhxzjyykdsfkdrmdxgho.supabase.co/functions/v1/junior-dev?url=${encodeURIComponent(url)}&email=${encodeURIComponent(email)}`;
-      document.getElementById("validator-url").textContent = `Testing with: ${validatorLink}`;
+      const validationLink = `https://yhxzjyykdsfkdrmdxgho.supabase.co/functions/v1/junior-dev?url=${encodeURIComponent(url)}&email=${encodeURIComponent(email)}`;
+      document.getElementById("validation_url").textContent = `Testing with: ${validationLink}`;
 
-      if (!email || !url) {
-        document.getElementById("result").innerHTML = "<p class='error'>Missing email or API URL in the query string.</p>";
+      if (!url || !email) {
+        document.getElementById("results").innerHTML = "<p class='error'>No email or API URL in the query string.</p>";
         return;
       }
 
       try {
-        const res = await fetch(validatorLink);
+        const res = await fetch(validationLink);
         const text = await res.text();
-        document.getElementById("result").textContent = text;
+        document.getElementById("results").textContent = text;
       } catch (err) {
-        document.getElementById("result").innerHTML = `<p class='error'>Error: ${err.message}</p>`;
+        document.getElementById("results").innerHTML = `<p class='error'>Error: ${err.message}</p>`;
       }
     }
 
