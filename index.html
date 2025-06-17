@@ -1,22 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Score keeper</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="scoreKeeper.css">
-    </head>
-    <body>
-        <div class="container">
-            <h1><span id="p1Display">0</span> - <span id="p2Display">0</span></h1>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="style.css">
+    <title>My form</title>
+</head>
+<body>
+    <div>
+      <form id="validation_form">
+        <h2>API Validator</h2>
+        <label for="url">Api Link:</label><br>
+        <input type="url" id="url" name="url" placeholder="link for your api endpoint" required><br>
+        <label for="email">Email address:</label><br>
+        <input type="email" id="email" name="email" placeholder="name@gmail.com" required>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
 
-            <p>Playing to: <span>5</span></p>
+     <div id="response"></div>
 
-            <input type="number" class="form-control" placeholder="edit playing score">
-            <button id="p1" class="btn btn-primary">Player One</button>
-            <button id="p2" class="btn btn-primary">Player Two</button>
-            <button id="reset" class="btn btn-primary">Reset</button>
-            <script type="text/javascript" src="scoreKeeper.js"></script>
-        </div>
-    </body>
+     <script>
+        document.getElementById("validation_formform").addEventListener("submit", async function (e) {
+          e.preventDefault();
+          
+          const url = document.getElementById("url").value.trim();
+          const email = document.getElementById("email").value.trim();
+
+          const testUrl = `https://yhxzjyykdsfkdrmdxgho.supabase.co/functions/v1/junior-dev?url=${encodeURIComponent(url)}&email=${encodeURIComponent(email)}`;
+
+          const responseDiv = document.getElementById("response");
+          responseDiv.innerHTML = "Loading...";
+
+          try {
+            const res = await fetch(testUrl);
+            const text = await res.text();
+
+            localStorage.setItem("validationResult", text);
+            window.location.href = "result.html";
+          } catch (err) {
+              alert("Something went wrong: " + err.message);
+            }
+        });
+     </script>
+    
+</body>
 </html>
